@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -26,14 +28,14 @@ public class MainActivity extends AppCompatActivity {
             ct.start();
         }
 
-
+/*
         for(CustomerThread ct : list){
-
             try {
                 // need something here
-            } catch (InterruptedException e) { }
+                while(true);
+            }catch (InterruptedException e) { }
         }
-
+*/
         manager.sort();
 
         MyBaseAdapter adapter = new MyBaseAdapter(this, manager.list);
@@ -52,6 +54,12 @@ class CustomerThread extends Thread{
         this.customer = customer;
     }
     // need something here
+
+    @Override
+    public void run() {
+        super.run();
+        customer.work();
+    }
 }
 
 abstract class Person{
@@ -70,6 +78,16 @@ class Customer extends Person{
         this.name = name;
     }
 
+    @Override
+    void work() {
+        Random random = new Random();
+        for(int i = 0; i < 10; i++){
+            int useM = random.nextInt() % 1000;
+            super.spent_money += useM;
+            money = money - useM;
+        }
+    }
+
     // need something here
 }
 
@@ -84,6 +102,18 @@ class Manager extends Person{
     void sort(){ // 직접 소팅 알고리즘을 이용하여 코딩해야함. 자바 기본 정렬 메소드 이용시 감
 
         // need something here
+        int max_money = 0;
+        Customer tmp;
+        for(int i = 0; i < list.size();i++){
+            max_money = list.get(i).spent_money;
+            for(int j = i; j < list.size(); j++){
+                if(max_money < list.get(j).spent_money) {
+                    tmp = list.get(i);
+                    list.add(i,list.get(j));
+                    list.add(j,tmp);
+                }
+            }
+        }
 
     }
 
